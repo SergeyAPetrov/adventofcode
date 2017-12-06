@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "adventofcodeLib", "lib\adventofcodeLib.fsproj", "{A191DF17-C2F3-4DBE-8416-88F120668DAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A191DF17-C2F3-4DBE-8416-88F120668DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A191DF17-C2F3-4DBE-8416-88F120668DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A191DF17-C2F3-4DBE-8416-88F120668DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A191DF17-C2F3-4DBE-8416-88F120668DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D83AC076-7DAD-405C-9F92-4EA108394D5C}
+	EndGlobalSection
+EndGlobal
