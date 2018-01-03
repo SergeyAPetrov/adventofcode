@@ -1,5 +1,25 @@
 ﻿module adventofcode2
 
+let decart list1 list2 =
+    List.collect (
+        fun e1 -> 
+            List.map ( fun e2 -> e1,e2) list2
+        ) list1
+
+let processRow2 row =
+    let pair = Array.allPairs row row
+                    |> Array.where (
+                        fun item -> 
+                            let a = fst item
+                            let b = snd item
+                            a <> b && (a % b = 0 || b % a = 0)
+                            )
+                    |> Array.head
+    let a = fst pair
+    let b = snd pair
+    if ( a < b ) then b /a 
+    else a / b
+
 let processRow row = 
     Array.max row - Array.min row
 
@@ -14,7 +34,7 @@ let doIt input =
     input
     |> parseString
     |> Array.map parseRow
-    |> Array.map processRow
+    |> Array.map processRow2
     |> Array.sum
 
 let value = @"6046	6349	208	276	4643	1085	1539	4986	7006	5374	252	4751	226	6757	7495	2923

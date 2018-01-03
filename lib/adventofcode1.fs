@@ -11,11 +11,21 @@ let pairwise (list:List<_>) =
     let pairs = List.pairwise list
     headAndTail :: pairs
 
+let halfWaywise (list:List<_>) = 
+    let offset = list.Length / 2
+    List.mapi (
+        fun i e -> 
+            let pairIndex = (offset + i) % list.Length
+            (e, list.Item(pairIndex))
+            )
+        list
+
 let result input =
     input 
     |> explode
     |> List.map toDigit
-    |> pairwise 
+    //|> pairwise 
+    |> halfWaywise
     |> List.map (
         fun (a, b) -> 
             if a = b then
