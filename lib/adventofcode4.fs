@@ -1,10 +1,23 @@
 ﻿module adventofcode4
+open System
 
-let isValidPassPhrase phrases = 
-    List.distinct phrases
+let sortStringLetters (str:string) = 
+    Seq.sort str
+    |> Seq.toArray
+    |> System.String
+
+let isValidPassPhrase (phrases:string list) = 
+    phrases 
+    |> List.distinct
     |> List.length
     |> (=) (List.length phrases)
 
+let isValidPassPhrase2 (phrases:string list) = 
+    phrases 
+    |> List.map sortStringLetters
+    |> List.distinct
+    |> List.length
+    |> (=) (List.length phrases)
 let parseRow (row:string) = 
    row.Split [|' '|] 
 
@@ -17,6 +30,14 @@ let solve input =
     |> Array.map (fun array-> Array.toList array)
     |> Array.map isValidPassPhrase
     |> Array.countBy (fun item -> item = true)
+
+let solve2 input = 
+    parseInput input
+    |> Array.map parseRow
+    |> Array.map (fun array-> Array.toList array)
+    |> Array.map isValidPassPhrase2
+    |> Array.countBy (fun item -> item = true)
+
 
 let input = @"una bokpr ftz ryw nau yknf fguaczl anu
 tvay wvco bcoblpt fwzg sfsys zvuqll mcbhwz ovcw fgdy

@@ -7,16 +7,17 @@ type Program =
         Children : string [] option
     } 
 
+
 let parseRow (row:string) = 
     let parts = row.Split(' ')
     let name = parts.[0]
-    let weight = parts.[1].Trim('(',')') |> System.Int32.Parse
+    let weight = parts.[1].Trim('(',')','\r') |> System.Int32.Parse
     if parts.Length = 2 then
         {Name=name; Weight = weight; Children = None}
     else
         let childs = 
             Array.skip 3 parts 
-            |> Array.map (fun x -> x.TrimEnd(','))
+            |> Array.map (fun x -> x.TrimEnd(',','\r'))
         {Name=name; Weight = weight; Children = Some childs}
 
 let parseInput (input:string) =
@@ -33,6 +34,65 @@ let solve input =
     let result = Array.except allChildNodes allNodes
     result.[0]
     
+let findProgram data name = 
+    Array.find (fun x-> x.Name = name) data
+    
+type WeightedProgram = 
+    {
+        Name : string
+        Weight: int
+        SubtreeWeight : int
+        Level : int
+        BalancedSubtree : bool
+        Children : WeightedProgram [] option
+    }
+
+let rec addWeights currentLevel data (node:Program) = 
+    match node.Children with
+        | Some childs -> 
+            let childProgramNodes = Array.map (fun x -> findProgram data x) childs 
+            let childNodes = Array.map (addWeights (currentLevel+1) data) childProgramNodes
+            let balancedSubtree = childNodes
+                                  |> Array.exists (fun x-> x.SubtreeWeight <> childNodes.[0].SubtreeWeight)
+                                  |> not
+            let subtreeWeight = childNodes 
+                                |> Array.map (fun x -> x.SubtreeWeight)
+                                |> Array.sum
+                                |> (+) node.Weight
+            {Name = node.Name; Weight = node.Weight; SubtreeWeight = subtreeWeight; Level=currentLevel;  BalancedSubtree = balancedSubtree; Children = Some childNodes}    
+        | None -> {Name = node.Name; Weight = node.Weight; SubtreeWeight = node.Weight;Level=currentLevel; BalancedSubtree = true; Children = None}
+        
+let rec treeToList node = 
+    match node.Children with
+        | None -> [node]
+        | Some childs -> node :: (childs 
+                                    |> Array.map treeToList 
+                                    |> List.concat)
+
+let solve2 input = 
+    let data = parseInput input
+    let rootProgram = solve input 
+                      |> findProgram data
+                      |> (addWeights 0 data)
+    let unbalancedNodes = rootProgram
+                            |> treeToList
+                            |> List.filter (fun x -> x.BalancedSubtree = false)
+                            |> List.maxBy (fun x -> x.Level)
+                            |> (fun parentWithProblem -> parentWithProblem.Children.Value)
+    
+    let badNode = unbalancedNodes
+                    |> Array.groupBy (fun x -> x.SubtreeWeight) 
+                    |> Array.filter (fun (_,(items:WeightedProgram[])) -> items.Length = 1) 
+                    |> Array.get <| 0
+                    |> snd
+                    |> Array.get <| 0
+    
+    let goodNode = unbalancedNodes
+                    |> Array.filter (fun x -> x <> badNode) 
+                    |> Array.get <| 0
+
+    badNode.Weight - badNode.SubtreeWeight + goodNode.SubtreeWeight 
+  
 let test = @"pbga (66)
 xhth (57)
 ebii (61)
