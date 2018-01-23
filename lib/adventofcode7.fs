@@ -82,7 +82,7 @@ let solve2 input =
     
     let badNode = unbalancedNodes
                     |> Array.groupBy (fun x -> x.SubtreeWeight) 
-                    |> Array.filter (fun (_,(items:WeightedProgram[])) -> items.Length = 1) 
+                    |> Array.filter (fun (_,items) -> items.Length = 1) 
                     |> Array.get <| 0
                     |> snd
                     |> Array.get <| 0
