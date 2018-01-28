@@ -66,6 +66,7 @@
     <Compile Include="adventofcode6.fs" />
     <Compile Include="adventofcode7.fs" />
     <Compile Include="adventofcode8BAD.fs" />
+    <Compile Include="adventofcode9.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
