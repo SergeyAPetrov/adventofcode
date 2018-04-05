@@ -51,6 +51,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="adventofcode12.fs" />
+    <Compile Include="adventofcode13.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Library1.fs" />
     <Compile Include="DU.fs" />
