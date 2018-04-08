@@ -52,6 +52,26 @@ let directionToCoords3 direction =
 let getDistance directions fn= 
     directions |> Array.map fn |> Array.fold (fun (finalCoorsx, finalcoordsy) (elemx, elemy) -> (finalCoorsx + elemx, finalcoordsy + elemy)) (0,0)
 
+let convertToPath path elem =
+    let head = List.head path
+    ((fst head + fst elem), (snd head + snd elem)) :: path
+
+let getPath directions fn =
+    directions
+    |> Array.map fn
+    |> Array.fold convertToPath [(0,0)]
+                           
+let coordsToDistance coords =
+    abs (fst coords) + abs (snd coords)
+
+let solve2 input = 
+    let directions = parseInput input
+    let path1 = getPath directions directionToCoords1
+    let path2 = getPath directions directionToCoords2
+    let path3 = getPath directions directionToCoords3
+    List.map3 (fun point1 point2 point3 -> List.min [coordsToDistance point1;coordsToDistance point2;coordsToDistance point3]) path1 path2 path3
+    |> List.max
+
 let solve input = 
     let directions = parseInput input
     let answer1 = getDistance directions directionToCoords1
