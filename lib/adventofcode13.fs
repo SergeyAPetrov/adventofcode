@@ -19,14 +19,30 @@ let parseInput (input:string) =
     |> Seq.map parseItem 
     
 let isCaught layer  =
-    layer.Range = 1 || layer.Depth % (2*(layer.Range-1)) = 0 
+    layer.Depth % (2*(layer.Range-1)) = 0 
     
+let isCaughtWithWait wait layer = 
+    isCaught {layer with Depth = layer.Depth + wait}
+
 let solve input =
     let layers = parseInput input
     layers 
     |> Seq.where isCaught
     |> Seq.map (fun l -> l.Severity)
     |> Seq.sum
+
+let checkWithWaitTime layers wait = 
+    layers
+    |> Seq.forall (fun layer -> not (isCaughtWithWait wait layer))
+
+let solve2 input =
+    let layers = parseInput input
+    let checkingFunction = checkWithWaitTime layers
+
+    let waitTimes = Seq.initInfinite (fun i -> i)
+    waitTimes
+    |> Seq.find checkingFunction
+    
 
 let test = @"0: 3
              1: 2

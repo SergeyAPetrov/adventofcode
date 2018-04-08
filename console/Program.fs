@@ -2005,5 +2005,5 @@ let main argv =
                          1997 <-> 928
                          1998 <-> 76, 1237, 1252
                          1999 <-> 1751"
-    Printf "%i" result 
+    printf "%i" result 
     0 // return an integer exit code
