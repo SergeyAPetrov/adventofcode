@@ -1,8 +1,5 @@
 ﻿module adventofcode1
 
-let explode (s:string) =
-        [for c in s -> c]
-
 let toDigit (digit:char) = 
     System.Int32.Parse (digit.ToString())
 
@@ -20,18 +17,12 @@ let halfWaywise (list:List<_>) =
             )
         list
 
-let result input =
+let sovlve input =
     input 
-    |> explode
+    |> Seq.toList
     |> List.map toDigit
     //|> pairwise 
     |> halfWaywise
-    |> List.map (
-        fun (a, b) -> 
-            if a = b then
-                a
-            else
-                0
-        )
-    |> List.sum 
+    |> List.filter (fun (a, b) -> a = b)
+    |> List.sumBy (fun (a,_) -> a) 
 //let count

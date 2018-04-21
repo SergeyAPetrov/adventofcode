@@ -1,25 +1,16 @@
 ﻿module adventofcode2
 
-let decart list1 list2 =
-    List.collect (
-        fun e1 -> 
-            List.map ( fun e2 -> e1,e2) list2
-        ) list1
-
 let processRow2 row =
     let pair = Array.allPairs row row
                     |> Array.where (
                         fun item -> 
                             let a = fst item
                             let b = snd item
-                            a <> b && (a % b = 0 || b % a = 0)
+                            a <> b && (a % b = 0)
                             )
                     |> Array.head
-    let a = fst pair
-    let b = snd pair
-    if ( a < b ) then b /a 
-    else a / b
-
+    fst pair / snd pair
+    
 let processRow row = 
     Array.max row - Array.min row
 
@@ -30,7 +21,7 @@ let parseRow (row:string) =
 let parseString (str:string) = 
     str.Split('\n')
 
-let doIt input = 
+let solve input = 
     input
     |> parseString
     |> Array.map parseRow
