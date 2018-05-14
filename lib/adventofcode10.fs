@@ -72,3 +72,6 @@ let solve2 input =
     |> calculateSparseHash
     |> calculateDenseHash
     |> denseHashToHex
+
+let knotHash =
+    solve2

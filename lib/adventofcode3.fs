@@ -64,6 +64,23 @@ type pointWithValue =
 
 let xy = Seq.zip xSpiralCoordinates ySpiralCoordinates
 
+let solve2rec number = 
+    let cells = xy.GetEnumerator()
+    cells.MoveNext() |> ignore
+    let rec solve state =
+        cells.MoveNext() |> ignore
+        let p = cells.Current
+        let neighbors = getNeighbors p
+        let nextValue = state
+                            |> List.where (fun x-> List.contains x.point neighbors) 
+                            |> List.map (fun x-> x.value)
+                            |> List.sum
+        if nextValue > number then
+            nextValue
+        else
+            solve ({point = p; value = nextValue} :: state)
+    solve [{point=cells.Current;value=1}]
+
 let solve2 number = 
     Seq.fold 
         (fun (state:pointWithValue list) (p:int*int) 
@@ -81,4 +98,3 @@ let solve2 number =
                     {point = p; value = nextValue} :: state
         ) 
         [] xy
-        
