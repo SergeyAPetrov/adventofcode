@@ -11,7 +11,8 @@ namespace cshaprPlayground
     {
         static void Main(string[] args)
         {
-            var graph = new AdjacencyGraph<int, Edge<int>>();
+            var graph = new UndirectedGraph<int, Edge<int>>();
+            
             graph.AddVerticesAndEdgeRange(new[] { new Edge<int>(1, 2) });
             graph.AddVertex(1);
         }
