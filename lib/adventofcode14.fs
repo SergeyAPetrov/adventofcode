@@ -29,9 +29,19 @@ let hash2Binary hash =
         |> Seq.map intToBinary
     String.Concat(binaries)
 
-
 type Vertex = {i: int; j : int}
 
+let line2Edges line i= 
+    line
+    |> Seq.mapi ( fun j ch -> (j,ch))
+    |> Seq.windowed 2
+    |> Seq.where (fun window -> snd window.[0] = '1' && snd window.[1] = '1')
+    |> Seq.map (fun window -> Edge({i=i;j=fst window.[0]},{i=i;j=fst window.[1]}))
+
+let columns2Edges lineOne lineTwo i =
+    Seq.mapi2 (fun j ch1 ch2 -> (j,ch1,ch2)) lineOne lineTwo
+    |> Seq.where (fun (_, ch1, ch2) -> ch1='1' && ch2='1')
+    |> Seq.map (fun (j, _, _) -> Edge({i=i;j=j},{i=i+1;j=j}))
 
 let solve2 input =
     let hashInputs = [0..127] |> List.map (fun number -> sprintf "%s-%i" input number)
@@ -39,7 +49,7 @@ let solve2 input =
                     |> List.map knotHash 
     let binaryStrings = hashes |> List.map hash2Binary
     let graph = new UndirectedGraph<Vertex, Edge<Vertex>>();
-    for i in 0..binaryStrings.Length do
+    for i in 0..binaryStrings.Length-1 do
         let currentLine = binaryStrings.Item i
         let vertices = currentLine
                     |> Seq.mapi (fun j char -> (j, char))
@@ -47,7 +57,24 @@ let solve2 input =
                     |> Seq.map (fun (j, _) -> {i=i; j=j})
         graph.AddVertexRange(vertices) |> ignore
     
-    1
+    let horizontalEdges = binaryStrings
+                            |> List.mapi (fun i str -> line2Edges str i)
+                            |> List.map Seq.toList
+                            |> List.concat
+    graph.AddEdgeRange(horizontalEdges) |> ignore
+
+    let verticalEdges = binaryStrings
+                            |> List.mapi (fun i str -> (i,str))
+                            |> List.windowed 2
+                            |> List.map (fun window -> columns2Edges (snd window.[0]) (snd window.[1]) (fst window.[0]))
+                            |> List.map Seq.toList
+                            |> List.concat
+    graph.AddEdgeRange(verticalEdges) |> ignore
+    let x = QuickGraph.Algorithms.ConnectedComponents.ConnectedComponentsAlgorithm(graph)
+    x.Compute()
+    x.Components 
+        |> Seq.groupBy (fun kv -> kv.Value)
+        |> Seq.length
     //let componentsMap = Array2D.create 128 128 0
 
     

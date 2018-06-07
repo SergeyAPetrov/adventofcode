@@ -12,7 +12,7 @@ namespace cshaprPlayground
         static void Main(string[] args)
         {
             var graph = new UndirectedGraph<int, Edge<int>>();
-            
+            //graph.AddVertexRange();
             graph.AddVerticesAndEdgeRange(new[] { new Edge<int>(1, 2) });
             graph.AddVertex(1);
         }
