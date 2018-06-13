@@ -73,6 +73,7 @@
     <Compile Include="adventofcode10.fs" />
     <Compile Include="adventofcode11.fs" />
     <Compile Include="adventofcode14.fs" />
+    <Compile Include="adventofcode15.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DotParser, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
