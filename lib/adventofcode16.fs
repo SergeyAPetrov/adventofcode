@@ -48,12 +48,17 @@ let input = @"x13/9,s8,x4/12,s11,x9/6,pi/b,x5/0,pl/o,x11/14,pg/k,x8/1,pf/h,x2/13
 let solve2 (input:string) =
     let initialState =['a'..'p']
     let moves =(input.Split([|','|]))
-    
-    let rec iteration state i =
-        if i=1000000000 then
+        
+    let rec findLoop state =
+        let nextIteration = dance moves (List.item 0 state)
+        if List.contains nextIteration state then
             state
         else 
-            let newState = dance moves initialState
-            iteration newState (i+1)
+            findLoop (nextIteration :: state)
+
+    let loop = findLoop [initialState]
     
-    iteration initialState 0
+    loop
+    |> List.rev
+    |> List.item (1000000000 % (List.length loop))
+    
